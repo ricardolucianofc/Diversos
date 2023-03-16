@@ -1,0 +1,55 @@
+PRINT TODOS AS ServerVariables, POST E GET NA TELA
+dim x 
+response.write("<hr><h3>ServerVariables</h3>") 
+for each x in Request.ServerVariables 
+	response.write(x & ": " & Request.ServerVariables(x) & "<br>") 
+next 
+response.write("<hr><h3>Form (POST)</h3>") 
+for each x in Request.Form 
+     response.write(x & ": " & Request.Form(x) & "<br>") 
+next 
+response.write("<hr><h3>Querystring (GET)</h3>") 
+for each x in Request.Querystring 
+	response.write(x & ": " & Request.Querystring(x) & "<br>") 
+next 
+response.write("<hr>") 
+response.end() 
+---
+capturar o id inserido
+set rsobjeto = conn.execute("SELECT IDENT_CURRENT('tb_solicitacao') cod") 
+cod_solicitacao = rsobjeto("cod")
+---
+WEB.CONFIG
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <defaultDocument>
+            <files>
+                <add value="index.asp" />
+            </files>
+        </defaultDocument>
+    </system.webServer>
+    <system.web>
+        <customErrors mode="Off" />
+    </system.web>
+</configuration>
+---
+CONN.ASP
+<%
+Dim conn
+
+Sub abreConn()
+	Dim objConn
+	set objConn = server.createobject("adodb.connection")
+	objConn.open "Provider=SQLOLEDB.1;User ID=TEST;Password=Test@123;Initial Catalog=candidato;Data Source=SNEPISC01V\SQLEXPRESS"
+	set conn = objConn
+End Sub
+
+Sub fechaConn()
+	if not(isEmpty(conn)) then
+		conn.close
+		Set conn=nothing
+	end if
+End sub
+%>
+---
